@@ -1,17 +1,6 @@
 Option EXPLICIT
 
-' seed RNG
-Randomize Timer
-
-Dim INTEGER r0 = 32 + Rnd * 95
-Dim INTEGER g0 = 32 + Rnd * 95
-Dim INTEGER b0 = 32 + Rnd * 95
-
-' random dark-ish background
-CLS RGB(r0, g0, b0)
-Print "r0: " r0
-Print "g0: " g0
-Print "b0: " b0
+Dim first = 1
 
 ' run sub on touch IRQ interrupt
 SetPin 15, INTL, DrawSplat
@@ -35,6 +24,25 @@ Sub DrawSplat
   ' ignore weird touch values
   If x >= 0 Then
     If y >= 0 Then
+
+      If first = 1 Then
+
+        ' seed RNG using touch coords + Timer
+        Randomize Timer + (x * 16) + (y * 16)
+
+        Dim INTEGER r0 = 32 + Rnd * 95
+        Dim INTEGER g0 = 32 + Rnd * 95
+        Dim INTEGER b0 = 32 + Rnd * 95
+
+        ' random dark-ish background
+        CLS RGB(r0, g0, b0)
+        Print "r0: " r0
+        Print "g0: " g0
+        Print "b0: " b0
+
+        first = 0
+      EndIf
+
       ' scatter several circles around point
       Print "m: " m
       For j = 1 To m
