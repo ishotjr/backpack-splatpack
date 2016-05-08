@@ -10,24 +10,32 @@ CLS RGB(Rnd * 256, Rnd * 256, Rnd * 256)
 SetPin 15, INTL, DrawSplat
 Do : Loop
 
+' draw random concentric circles at touch coords
 Sub DrawSplat
-  ' draw random circle at touch coords
   Local INTEGER r
   Local INTEGER g
   Local INTEGER b
   Local INTEGER x = Touch(X)
   Local INTEGER y = Touch(Y)
-  Local INTEGER n = 2 + (Rnd * 7)
+  Local INTEGER n = 2 + (Rnd * 4)'5)
   Local INTEGER i
+  Local INTEGER d
 
-  ' draw 3-8 concentric circles of different colors
-
-  For i = 1 To n
-    ' TODO: check rounding: expected 0-0.999 but getting 1?
-    r = Rnd * 255 '256
-    g = Rnd * 255 '256
-    b = Rnd * 255 '256
-    Circle x, y, Rnd*MM.HRes/(n*2), 1, 1, RGB(r, g, b), RGB(r, g, b)
-  Next
+  ' ignore weird touch values
+  If x >= 0 Then
+    If y >= 0 Then
+    ' draw 2-6 concentric circles of different colors
+      Print "n: " n
+      For i = 1 To n
+        ' TODO: check rounding: expected 0-0.999 but getting 1?
+        r = Rnd * 255 '256
+        g = Rnd * 255 '256
+        b = Rnd * 255 '256
+        d = MM.VRes/(i*6) + (Rnd * MM.VRes/((i+1)*4))
+        Circle x, y, d/2, 1, 1, RGB(r, g, b), RGB(r, g, b)
+        Print "circle: " x y d "(" r "," g "," b ")"
+      Next
+    EndIf
+  EndIf
 
 End Sub
