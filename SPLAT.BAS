@@ -3,8 +3,15 @@ Option EXPLICIT
 ' seed RNG
 Randomize Timer
 
-' random blue-ish background
-CLS RGB(Rnd * 15, Rnd * 15, 64 + Rnd * 63)
+Dim INTEGER r0 = 32 + Rnd * 95
+Dim INTEGER g0 = 32 + Rnd * 95
+Dim INTEGER b0 = 32 + Rnd * 95
+
+' random dark-ish background
+CLS RGB(r0, g0, b0)
+Print "r0: " r0
+Print "g0: " g0
+Print "b0: " b0
 
 ' run sub on touch IRQ interrupt
 SetPin 15, INTL, DrawSplat
@@ -39,9 +46,12 @@ Sub DrawSplat
         Print "n: " n
         For i = 1 To n
          ' TODO: check rounding: expected 0-0.999 but getting 1?
-          r = Rnd * 15 '16
-          g = Rnd * 15 '16
-          b = 128 + Rnd * 95 '256
+          r = 255 - r0 + 24 + (Rnd * n * 4) '16
+          If r > 255 Then r = 255
+          g = 255 - g0 + 24 + (Rnd * n * 4) '16
+          If g > 255 Then g = 255
+          b = 255 - b0 + 24 + (Rnd * n * 4) '16
+          If b > 255 Then b = 255
           d = MM.VRes/(i*6) + (Rnd * MM.VRes/((i+1)*4))
           Circle xm, ym, d/2, 1, 1, RGB(r, g, b), RGB(r, g, b)
           Print "circle: " xm ym d "(" r "," g "," b ")"
